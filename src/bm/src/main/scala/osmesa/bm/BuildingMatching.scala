@@ -245,13 +245,13 @@ object BuildingMatching extends CommandApp(
               val retval = mutable.ArrayBuffer.empty[(OSMFeature, (Double, Long))]
               // val retval = mutable.ArrayBuffer.empty[(OSMFeature, (Double, Geometry))]
 
-              intersection.foreach({ f =>
-                val geom = f.geom
-                val data = f.data
-                val f2 = new OSMFeature(geom, tags.set(data.tags + ("dataset" -> "both"))(data))
-                val pair = (f2, (1.0, 0L))
-                retval.append(pair)
-              })
+              // intersection.foreach({ f =>
+              //   val geom = f.geom
+              //   val data = f.data
+              //   val f2 = new OSMFeature(geom, tags.set(data.tags + ("dataset" -> "both"))(data))
+              //   val pair = (f2, (1.0, 0L))
+              //   retval.append(pair)
+              // })
 
               // left
               var i = 0; while (i < left.length) {
