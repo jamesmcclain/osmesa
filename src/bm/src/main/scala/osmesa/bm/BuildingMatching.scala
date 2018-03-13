@@ -253,53 +253,63 @@ object BuildingMatching extends CommandApp(
               //   retval.append(pair)
               // })
 
-              // left
-              var i = 0; while (i < left.length) {
-                val f1 = left(i)
+              // // left
+              // var i = 0; while (i < left.length) {
+              //   val f1 = left(i)
+              //   val geom = f1.geom
+              //   val data = f1.data
+              //   val f2 = new OSMFeature(geom, tags.set(data.tags + ("dataset" -> "left"))(data))
+              //   var matched = false
+              //   var bestMatchProb = 0.0
+              //   var bestMatchUid = 0L
+              //   var j = 0; while (j < right.length) {
+              //     val geom2 = right(j).geom
+              //     if (p(i)(j) > bestMatchProb) {
+              //       bestMatchProb = p(i)(j)
+              //       bestMatchUid = right(j).data.uid
+              //     }
+              //     if ((p(i)(j) > 0.50) && (geom.distance(geom2) < 0.01)) { // XXX
+              //       // val pair2 = (p(i)(j), geom2)
+              //       val pair2 = (p(i)(j), right(j).data.uid)
+              //       val pair = (f2, pair2)
+              //       // retval.append(pair)
+              //       matched = true
+              //     }
+              //     j = j + 1
+              //   }
+              //   if (!matched)
+              //     retval.append((f2, (bestMatchProb, bestMatchUid)))
+              //   i = i + 1
+              // }
+
+              // right
+              var j = 0; while (j < right.length) {
+                val f1 = right(j)
                 val geom = f1.geom
                 val data = f1.data
-                val f2 = new OSMFeature(geom, tags.set(data.tags + ("dataset" -> "left"))(data))
+                val f2 = new OSMFeature(geom, tags.set(data.tags + ("dataset" -> "right"))(data))
                 var matched = false
                 var bestMatchProb = 0.0
                 var bestMatchUid = 0L
-                var j = 0; while (j < right.length) {
-                  val geom2 = right(j).geom
+                var i = 0; while (i < left.length) {
+                  val geom2 = left(i).geom
                   if (p(i)(j) > bestMatchProb) {
                     bestMatchProb = p(i)(j)
                     bestMatchUid = right(j).data.uid
                   }
                   if ((p(i)(j) > 0.50) && (geom.distance(geom2) < 0.01)) { // XXX
                     // val pair2 = (p(i)(j), geom2)
-                    val pair2 = (p(i)(j), right(j).data.uid)
+                    val pair2 = (p(i)(j), left(i).data.uid)
                     val pair = (f2, pair2)
                     // retval.append(pair)
                     matched = true
                   }
-                  j = j + 1
+                  i = i + 1
                 }
                 if (!matched)
                   retval.append((f2, (bestMatchProb, bestMatchUid)))
-                i = i + 1
+                j = j + 1
               }
-
-              // // right
-              // var j = 0; while (j < right.length) {
-              //   val f1 = right(j)
-              //   val geom = f1.geom
-              //   val data = f1.data
-              //   val f2 = new OSMFeature(geom, tags.set(data.tags + ("dataset" -> "right"))(data))
-              //   var i = 0; while (i < left.length) {
-              //     val geom2 = left(i).geom
-              //     if ((p(i)(j) > 0.50) && (geom.distance(geom2) < 0.01)) { // XXX
-              //       // val pair2 = (p(i)(j), geom2)
-              //       val pair2 = (p(i)(j), left(i).data.uid)
-              //       val pair = (f2, pair2)
-              //       retval.append(pair)
-              //     }
-              //     i = i + 1
-              //   }
-              //   j = j + 1
-              // }
 
               retval.toIterator
             }, preservesPartitioning = true)
